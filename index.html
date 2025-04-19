@@ -62,9 +62,9 @@
             
             marker.bindPopup(`
                 <div class="info-box">
-                    <h3>${location.query}</h3>
+                    <h3>${location.ip}</h3>
                     <p>Location: ${location.city || 'Unknown'}, ${location.country || 'Unknown'}</p>
-                    <p>Organization: ${location.org || location.isp || 'Unknown'}</p>
+                    <p>Organization: ${location.org || 'Unknown'}</p>
                     <p>Coordinates: ${location.lat}, ${location.lon}</p>
                 </div>
             `);
@@ -74,30 +74,12 @@
         async function loadIPAddresses() {
             try {
                 const response = await fetch('list.json');
-                const ipList = await response.json();
+                const locations = await response.json();
                 
-                // Batch process IPs in groups of 100 (ip-api.com limit)
-                const batchSize = 100;
-                for (let i = 0; i < ipList.length; i += batchSize) {
-                    const batch = ipList.slice(i, i + batchSize);
-                    const batchResponse = await fetch(`http://ip-api.com/json/${batch.join(',')}?fields=status,message,country,countryCode,city,lat,lon,org,query,isp`, {
-                        method: 'GET',
-                        headers: {
-                            'Accept': 'application/json',
-                        }
-                    });
-                    
-                    const locations = await batchResponse.json();
-                    if (Array.isArray(locations)) {
-                        locations.forEach(location => {
-                            if (location.status === 'success') {
-                                addMarkerToMap(location);
-                            }
-                        });
-                    } else if (locations.status === 'success') {
-                        addMarkerToMap(locations);
-                    }
-                }
+                // Add all markers to the map
+                locations.forEach(location => {
+                    addMarkerToMap(location);
+                });
                 
                 // Hide loading indicator
                 document.getElementById('loading').style.display = 'none';
