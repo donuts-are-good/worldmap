@@ -47,37 +47,11 @@
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        // Function to fetch IP geolocation data
-        async function getIPLocation(ip) {
-            try {
-                const response = await fetch(`https://ipapi.co/${ip}/json/`);
-                const data = await response.json();
-                
-                // Check if we got valid location data
-                if (data.error || !data.latitude || !data.longitude) {
-                    console.error(`Error getting location for IP ${ip}:`, data.reason || 'Unknown error');
-                    return null;
-                }
-                
-                return {
-                    ip: ip,
-                    latitude: data.latitude,
-                    longitude: data.longitude,
-                    city: data.city,
-                    country: data.country_name,
-                    org: data.org
-                };
-            } catch (error) {
-                console.error(`Error fetching data for IP ${ip}:`, error);
-                return null;
-            }
-        }
-
         // Function to add markers to the map
         function addMarkerToMap(location) {
             if (!location) return;
             
-            const marker = L.circleMarker([location.latitude, location.longitude], {
+            const marker = L.circleMarker([location.lat, location.lon], {
                 radius: 8,
                 fillColor: "#ff7800",
                 color: "#000",
@@ -88,10 +62,10 @@
             
             marker.bindPopup(`
                 <div class="info-box">
-                    <h3>${location.ip}</h3>
+                    <h3>${location.query}</h3>
                     <p>Location: ${location.city || 'Unknown'}, ${location.country || 'Unknown'}</p>
-                    <p>Organization: ${location.org || 'Unknown'}</p>
-                    <p>Coordinates: ${location.latitude}, ${location.longitude}</p>
+                    <p>Organization: ${location.org || location.isp || 'Unknown'}</p>
+                    <p>Coordinates: ${location.lat}, ${location.lon}</p>
                 </div>
             `);
         }
@@ -102,14 +76,27 @@
                 const response = await fetch('list.json');
                 const ipList = await response.json();
                 
-                // Add a small delay between requests to avoid rate limiting
-                for (const ip of ipList) {
-                    const location = await getIPLocation(ip);
-                    if (location) {
-                        addMarkerToMap(location);
+                // Batch process IPs in groups of 100 (ip-api.com limit)
+                const batchSize = 100;
+                for (let i = 0; i < ipList.length; i += batchSize) {
+                    const batch = ipList.slice(i, i + batchSize);
+                    const batchResponse = await fetch(`http://ip-api.com/json/${batch.join(',')}?fields=status,message,country,countryCode,city,lat,lon,org,query,isp`, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json',
+                        }
+                    });
+                    
+                    const locations = await batchResponse.json();
+                    if (Array.isArray(locations)) {
+                        locations.forEach(location => {
+                            if (location.status === 'success') {
+                                addMarkerToMap(location);
+                            }
+                        });
+                    } else if (locations.status === 'success') {
+                        addMarkerToMap(locations);
                     }
-                    // Add a small delay between requests
-                    await new Promise(resolve => setTimeout(resolve, 1000));
                 }
                 
                 // Hide loading indicator

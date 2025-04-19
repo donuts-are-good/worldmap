@@ -1,13 +1,83 @@
 [
-    "8.8.8.8",
-    "1.1.1.1",
-    "208.67.222.222",
-    "4.2.2.2",
-    "9.9.9.9",
-    "13.107.21.200",
-    "52.94.237.1",
-    "23.53.254.142",
-    "151.101.1.69",
-    "185.199.108.153"
-  ]
+  {
+    "ip": "8.8.8.8",
+    "latitude": 37.751,
+    "longitude": -97.822,
+    "city": "Mountain View",
+    "country": "United States",
+    "org": "Google LLC"
+  },
+  {
+    "ip": "1.1.1.1",
+    "latitude": -33.494,
+    "longitude": 143.2104,
+    "city": "Sydney",
+    "country": "Australia",
+    "org": "Cloudflare, Inc."
+  },
+  {
+    "ip": "208.67.222.222",
+    "latitude": 37.7749,
+    "longitude": -122.4194,
+    "city": "San Francisco",
+    "country": "United States",
+    "org": "OpenDNS, LLC"
+  },
+  {
+    "ip": "4.2.2.2",
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "city": "New York",
+    "country": "United States",
+    "org": "Level 3 Communications"
+  },
+  {
+    "ip": "9.9.9.9",
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "city": "New York",
+    "country": "United States",
+    "org": "Quad9"
+  },
+  {
+    "ip": "13.107.21.200",
+    "latitude": 47.6062,
+    "longitude": -122.3321,
+    "city": "Redmond",
+    "country": "United States",
+    "org": "Microsoft Corporation"
+  },
+  {
+    "ip": "52.94.237.1",
+    "latitude": 47.6062,
+    "longitude": -122.3321,
+    "city": "Seattle",
+    "country": "United States",
+    "org": "Amazon.com, Inc."
+  },
+  {
+    "ip": "23.53.254.142",
+    "latitude": 41.8781,
+    "longitude": -87.6298,
+    "city": "Chicago",
+    "country": "United States",
+    "org": "Akamai Technologies"
+  },
+  {
+    "ip": "151.101.1.69",
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "city": "New York",
+    "country": "United States",
+    "org": "Fastly"
+  },
+  {
+    "ip": "185.199.108.153",
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "city": "New York",
+    "country": "United States",
+    "org": "GitHub, Inc."
+  }
+]
   
